@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>September 2026</title>
+  <style>
+    :root {
+      --bg: #f6f3ed;
+      --paper: #fffdf8;
+      --ink: #18202a;
+      --muted: #657080;
+      --line: #d9ded8;
+      --forest: #1f6f5f;
+      --forest-dark: #164b42;
+      --coral: #d95f45;
+      --sun: #f0b84f;
+      --blue: #5b7fa6;
+      --good: #227a4f;
+      --bad: #b34034;
+      --good-bg: #dcf3e6;
+      --bad-bg: #f8ddd9;
+      --shadow: 0 18px 50px rgba(23, 31, 42, 0.12);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        linear-gradient(135deg, rgba(31, 111, 95, 0.12), transparent 36%),
+        linear-gradient(315deg, rgba(217, 95, 69, 0.12), transparent 34%),
+        var(--bg);
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    .app {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 36px;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 24px;
+      align-items: end;
+      padding: 28px 0 22px;
+    }
+
+    .kicker {
+      margin: 0 0 8px;
+      color: var(--forest-dark);
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.5rem, 8vw, 6.7rem);
+      line-height: 0.9;
+      letter-spacing: 0;
+    }
+
+    .intro {
+      max-width: 650px;
+      margin: 18px 0 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 1.02rem;
+    }
+
+    .scoreboard {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(92px, 1fr));
+      gap: 10px;
+      min-width: 330px;
+    }
+
+    .stat {
+      background: rgba(255, 253, 248, 0.82);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      box-shadow: 0 12px 26px rgba(23, 31, 42, 0.08);
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.76rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    .stat strong {
+      display: block;
+      margin-top: 5px;
+      font-size: 1.5rem;
+    }
+
+    .tabs,
+    .filters,
+    .actions,
+    .source-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tabs {
+      margin: 4px 0 18px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 10px;
+    }
+
+    .tab,
+    .pill,
+    .icon-button {
+      min-height: 40px;
+      border-radius: 8px;
+      background: rgba(255, 253, 248, 0.88);
+      color: var(--ink);
+      border: 1px solid var(--line);
+      font-weight: 800;
+      padding: 10px 14px;
+    }
+
+    .tab[aria-selected="true"],
+    .pill.active {
+      color: #fff;
+      background: var(--forest);
+      border-color: var(--forest);
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(310px, 0.85fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel,
+    .practice-card,
+    .side-card,
+    .word-row {
+      background: rgba(255, 253, 248, 0.92);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .practice-card {
+      padding: clamp(18px, 3vw, 28px);
+      display: grid;
+      gap: 18px;
+    }
+
+    .practice-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(1.45rem, 3vw, 2.25rem);
+      letter-spacing: 0;
+    }
+
+    .prompt-box {
+      min-height: 180px;
+      display: grid;
+      align-content: center;
+      gap: 10px;
+      border-radius: 8px;
+      padding: clamp(20px, 5vw, 38px);
+      background:
+        linear-gradient(140deg, rgba(31, 111, 95, 0.14), rgba(91, 127, 166, 0.12)),
+        #ffffff;
+      border: 1px solid rgba(31, 111, 95, 0.18);
+    }
+
+    .prompt-label {
+      color: var(--forest-dark);
+      font-size: 0.78rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .prompt {
+      margin: 0;
+      font-size: clamp(2.1rem, 6vw, 4.5rem);
+      line-height: 1;
+      font-weight: 900;
+      overflow-wrap: anywhere;
+    }
+
+    .hint {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .answer-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .choice {
+      min-height: 66px;
+      padding: 14px 16px;
+      text-align: left;
+      border-radius: 8px;
+      background: #fff;
+      border: 1px solid var(--line);
+      color: var(--ink);
+      font-weight: 800;
+    }
+
+    .choice.correct {
+      background: var(--good-bg);
+      border-color: rgba(34, 122, 79, 0.32);
+      color: var(--good);
+    }
+
+    .choice.wrong {
+      background: var(--bad-bg);
+      border-color: rgba(179, 64, 52, 0.32);
+      color: var(--bad);
+    }
+
+    .type-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+    }
+
+    input[type="text"],
+    select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--ink);
+      min-height: 48px;
+      padding: 12px 14px;
+    }
+
+    input[type="text"]:focus,
+    select:focus {
+      outline: 3px solid rgba(31, 111, 95, 0.18);
+      border-color: var(--forest);
+    }
+
+    .primary,
+    .secondary,
+    .danger {
+      min-height: 48px;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-weight: 900;
+    }
+
+    .primary {
+      background: var(--coral);
+      color: #fff;
+    }
+
+    .secondary {
+      background: var(--ink);
+      color: #fff;
+    }
+
+    .danger {
+      background: rgba(179, 64, 52, 0.12);
+      color: var(--bad);
+    }
+
+    .feedback {
+      min-height: 54px;
+      padding: 13px 14px;
+      border-radius: 8px;
+      background: rgba(24, 32, 42, 0.05);
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .feedback.good {
+      background: var(--good-bg);
+      color: var(--good);
+    }
+
+    .feedback.bad {
+      background: var(--bad-bg);
+      color: var(--bad);
+    }
+
+    .side {
+      display: grid;
+      gap: 18px;
+    }
+
+    .side-card {
+      padding: 18px;
+    }
+
+    .side-card h3 {
+      margin: 0 0 12px;
+      font-size: 1rem;
+    }
+
+    .mini-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .mini-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    .mini-item:last-child {
+      border-bottom: 0;
+    }
+
+    .mini-item strong {
+      color: var(--ink);
+    }
+
+    .source-image {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      margin-top: 12px;
+    }
+
+    .browse {
+      display: none;
+      gap: 14px;
+    }
+
+    .browse.active {
+      display: grid;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(190px, auto);
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .word-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .word-row {
+      box-shadow: none;
+      padding: 14px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 10px;
+      align-items: center;
+    }
+
+    .word-row span {
+      color: var(--muted);
+      overflow-wrap: anywhere;
+    }
+
+    .phrase-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .phrase-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-left: 6px solid var(--blue);
+      border-radius: 8px;
+      padding: 14px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .phrase-card strong {
+      color: var(--ink);
+    }
+
+    .phrase-card span {
+      color: var(--muted);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 880px) {
+      header,
+      main {
+        grid-template-columns: 1fr;
+      }
+
+      .scoreboard {
+        min-width: 0;
+      }
+
+      .toolbar,
+      .word-list,
+      .answer-grid,
+      .type-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <section>
+        <p class="kicker">English practice set</p>
+        <h1>September 2026</h1>
+        <p class="intro">Practice the clothes, feelings, appearance words, and sentence patterns from the two pages. Switch between quick choices, typed answers, phrase drills, and the complete review list.</p>
+      </section>
+      <aside class="scoreboard" aria-label="Practice score">
+        <div class="stat"><span>Correct</span><strong id="correctCount">0</strong></div>
+        <div class="stat"><span>Wrong</span><strong id="wrongCount">0</strong></div>
+        <div class="stat"><span>Streak</span><strong id="streakCount">0</strong></div>
+      </aside>
+    </header>
+
+    <nav class="tabs" aria-label="Practice modes">
+      <button class="tab" data-tab="quiz" aria-selected="true">Quiz</button>
+      <button class="tab" data-tab="typing" aria-selected="false">Typing</button>
+      <button class="tab" data-tab="phrases" aria-selected="false">Phrases</button>
+      <button class="tab" data-tab="browse" aria-selected="false">Review</button>
+    </nav>
+
+    <main>
+      <section class="practice-card" id="quizPanel">
+        <div class="practice-head">
+          <h2>Choose the translation</h2>
+          <div class="filters">
+            <button class="pill active" data-direction="en-nl">EN to NL</button>
+            <button class="pill" data-direction="nl-en">NL to EN</button>
+          </div>
+        </div>
+        <div class="prompt-box">
+          <span class="prompt-label" id="quizLabel">English</span>
+          <p class="prompt" id="quizPrompt">angry</p>
+          <p class="hint" id="quizHint">Pick the Dutch translation.</p>
+        </div>
+        <div class="answer-grid" id="choices"></div>
+        <div class="feedback" id="quizFeedback">Start with any answer. The next question will appear automatically when you move on.</div>
+        <div class="actions">
+          <button class="secondary" id="nextQuestion">Next word</button>
+          <button class="danger" id="resetScore">Reset score</button>
+        </div>
+      </section>
+
+      <section class="practice-card hidden" id="typingPanel">
+        <div class="practice-head">
+          <h2>Type the answer</h2>
+          <select id="typingDirection" aria-label="Typing direction">
+            <option value="en-nl">English to Dutch</option>
+            <option value="nl-en">Dutch to English</option>
+          </select>
+        </div>
+        <div class="prompt-box">
+          <span class="prompt-label" id="typingLabel">English</span>
+          <p class="prompt" id="typingPrompt">shirt</p>
+          <p class="hint">Spelling matters, but small differences in punctuation are okay.</p>
+        </div>
+        <form class="type-row" id="typingForm">
+          <input id="typedAnswer" type="text" autocomplete="off" placeholder="Type your answer">
+          <button class="primary" type="submit">Check</button>
+        </form>
+        <div class="feedback" id="typingFeedback">Try one. You can press Enter to check.</div>
+        <div class="actions">
+          <button class="secondary" id="skipTyping">Skip</button>
+        </div>
+      </section>
+
+      <section class="practice-card hidden" id="phrasesPanel">
+        <div class="practice-head">
+          <h2>Phrase practice</h2>
+          <button class="secondary" id="newPhrase">New phrase</button>
+        </div>
+        <div class="prompt-box">
+          <span class="prompt-label">Translate this</span>
+          <p class="prompt" id="phrasePrompt">What are you wearing?</p>
+          <p class="hint" id="phraseHint">Say it in Dutch.</p>
+        </div>
+        <form class="type-row" id="phraseForm">
+          <input id="phraseAnswer" type="text" autocomplete="off" placeholder="Type the translation">
+          <button class="primary" type="submit">Check</button>
+        </form>
+        <div class="feedback" id="phraseFeedback">Use the model sentences from Unit 1, Lesson 5.</div>
+      </section>
+
+      <section class="practice-card hidden" id="browsePanel">
+        <div class="practice-head">
+          <h2>Review everything</h2>
+          <div class="source-tabs">
+            <button class="pill active" data-review="words">Words</button>
+            <button class="pill" data-review="phrases">Phrases</button>
+          </div>
+        </div>
+        <div class="toolbar">
+          <input id="searchBox" type="text" placeholder="Search English or Dutch">
+          <select id="categoryFilter" aria-label="Category filter"></select>
+        </div>
+        <div class="browse active" id="wordBrowse">
+          <div class="word-list" id="wordList"></div>
+        </div>
+        <div class="browse" id="phraseBrowse">
+          <div class="phrase-list" id="phraseList"></div>
+        </div>
+      </section>
+
+      <aside class="side">
+        <section class="side-card">
+          <h3>Today's focus</h3>
+          <div class="mini-list">
+            <div class="mini-item"><strong>Clothes</strong><span>shirt, shorts, tie, suit, trainers</span></div>
+            <div class="mini-item"><strong>Looks</strong><span>slim, skinny, dark-skinned, skin colour</span></div>
+            <div class="mini-item"><strong>Feelings</strong><span>angry, happy, shy, scared, sad</span></div>
+            <div class="mini-item"><strong>Sentences</strong><span>What are they wearing?</span></div>
+          </div>
+        </section>
+        <section class="side-card">
+          <h3>Source pages</h3>
+          <div class="source-tabs">
+            <button class="pill active" data-source="words-page.jpg">Words</button>
+            <button class="pill" data-source="phrases-page.jpg">Phrases</button>
+          </div>
+          <img class="source-image" id="sourceImage" src="assets/words-page.jpg" alt="Photo of the vocabulary source page">
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    const words = [
+      ["angry", "boos", "feelings"], ["beard", "baard", "appearance"], ["belt", "riem", "clothes"],
+      ["bracelet", "armband", "clothes"], ["button", "knoop", "clothes"], ["calm", "rustig / kalm", "feelings"],
+      ["cardigan", "vest", "clothes"], ["checked", "geruit", "patterns"], ["dark-skinned", "donker getint", "appearance"],
+      ["different / the same", "verschillend / hetzelfde", "describing"], ["disappointed", "teleurgesteld", "feelings"],
+      ["gloves", "handschoenen", "clothes"], ["happy", "blij", "feelings"], ["hat", "hoed", "clothes"],
+      ["jacket", "jasje, colbert", "clothes"], ["light / dark", "licht / donker", "describing"],
+      ["lively", "levendig", "describing"], ["necklace", "halsketting", "clothes"], ["sad", "verdrietig", "feelings"],
+      ["scared", "bang", "feelings"], ["shirt", "overhemd", "clothes"], ["shorts", "korte broek", "clothes"],
+      ["shoelace", "schoenveter", "clothes"], ["shy", "verlegen", "feelings"], ["sleeves", "mouwen", "clothes"],
+      ["slim", "slank", "appearance"], ["skin colour", "huidskleur", "appearance"], ["skinny", "mager", "appearance"],
+      ["spotted", "gestippeld", "patterns"], ["striped", "gestreept", "patterns"], ["suit", "pak, kostuum", "clothes"],
+      ["swimsuit", "badpak", "clothes"], ["tie", "stropdas", "clothes"], ["tight", "strak", "describing"],
+      ["to put on", "aantrekken", "actions"], ["to take off", "uitdoen", "actions"], ["tracksuit", "trainingspak", "clothes"],
+      ["trainers", "sportschoenen", "clothes"], ["weight", "gewicht", "appearance"], ["zipper", "rits", "clothes"]
+    ].map(([en, nl, category]) => ({ en, nl, category }));
+
+    const phrases = [
+      { en: "What are you wearing?", nl: "Wat heb jij aan?", note: "asking one person" },
+      { en: "I am wearing jeans.", nl: "Ik heb jeans aan.", note: "answering for yourself" },
+      { en: "What is he wearing?", nl: "Wat heeft hij aan?", note: "asking about him" },
+      { en: "What is she wearing?", nl: "Wat heeft zij aan?", note: "asking about her" },
+      { en: "He is wearing trousers.", nl: "Hij heeft een broek aan.", note: "describing him" },
+      { en: "She is wearing a sweater.", nl: "Zij heeft een trui aan.", note: "describing her" },
+      { en: "What are they wearing?", nl: "Wat hebben zij aan?", note: "asking about people" },
+      { en: "They are wearing nice sweaters.", nl: "Zij hebben leuke truien aan.", note: "describing people" },
+      { en: "You are wearing a nice dress.", nl: "Je hebt een leuke jurk aan.", note: "speaking to another person" },
+      { en: "What does he look like?", nl: "Hoe ziet hij eruit?", note: "appearance" },
+      { en: "What does she look like?", nl: "Hoe ziet zij eruit?", note: "appearance" },
+      { en: "What do they look like?", nl: "Hoe zien zij eruit?", note: "appearance" },
+      { en: "My eyes are blue.", nl: "Mijn ogen zijn blauw.", note: "describing yourself" },
+      { en: "My mouth is large.", nl: "Mijn mond is groot.", note: "describing yourself" },
+      { en: "Your hands are big.", nl: "Je handen zijn groot.", note: "describing another person" },
+      { en: "Your nose is small.", nl: "Je neus is klein.", note: "describing another person" },
+      { en: "His arms are long.", nl: "Zijn armen zijn lang.", note: "describing him" },
+      { en: "His hair is short.", nl: "Zijn haar is kort.", note: "describing him" },
+      { en: "Her ears are small.", nl: "Haar oren zijn klein.", note: "describing her" },
+      { en: "Her hair is blond.", nl: "Haar haar is blond.", note: "describing her" },
+      { en: "Their legs are long.", nl: "Hun benen zijn lang.", note: "describing people" },
+      { en: "Their hair is dark.", nl: "Hun haar is donker.", note: "describing people" }
+    ];
+
+    const state = {
+      tab: "quiz",
+      direction: "en-nl",
+      current: null,
+      typingCurrent: null,
+      phraseCurrent: null,
+      score: JSON.parse(localStorage.getItem("september2026Score") || "{\"correct\":0,\"wrong\":0,\"streak\":0}")
+    };
+
+    const $ = (selector) => document.querySelector(selector);
+    const $$ = (selector) => [...document.querySelectorAll(selector)];
+
+    function normalize(value) {
+      return value.toLowerCase().trim().replace(/[.,!?]/g, "").replace(/\s+/g, " ");
+    }
+
+    function acceptable(answer, expected) {
+      const a = normalize(answer);
+      return expected.split(/\s*\/\s*|,\s*/).some((part) => a === normalize(part)) || a === normalize(expected);
+    }
+
+    function pick(array) {
+      return array[Math.floor(Math.random() * array.length)];
+    }
+
+    function shuffle(array) {
+      return [...array].sort(() => Math.random() - 0.5);
+    }
+
+    function saveScore() {
+      localStorage.setItem("september2026Score", JSON.stringify(state.score));
+      $("#correctCount").textContent = state.score.correct;
+      $("#wrongCount").textContent = state.score.wrong;
+      $("#streakCount").textContent = state.score.streak;
+    }
+
+    function score(isCorrect) {
+      if (isCorrect) {
+        state.score.correct += 1;
+        state.score.streak += 1;
+      } else {
+        state.score.wrong += 1;
+        state.score.streak = 0;
+      }
+      saveScore();
+    }
+
+    function setFeedback(element, text, type) {
+      element.textContent = text;
+      element.className = `feedback ${type || ""}`.trim();
+    }
+
+    function newQuiz() {
+      const item = pick(words);
+      state.current = item;
+      const promptKey = state.direction === "en-nl" ? "en" : "nl";
+      const answerKey = state.direction === "en-nl" ? "nl" : "en";
+      $("#quizPrompt").textContent = item[promptKey];
+      $("#quizLabel").textContent = state.direction === "en-nl" ? "English" : "Dutch";
+      $("#quizHint").textContent = state.direction === "en-nl" ? "Pick the Dutch translation." : "Pick the English translation.";
+      const wrong = shuffle(words.filter((word) => word !== item)).slice(0, 3).map((word) => word[answerKey]);
+      const options = shuffle([item[answerKey], ...wrong]);
+      $("#choices").innerHTML = options.map((option) => `<button class="choice" type="button">${option}</button>`).join("");
+      setFeedback($("#quizFeedback"), "Choose the best match.", "");
+      $$("#choices .choice").forEach((button) => {
+        button.addEventListener("click", () => {
+          const ok = button.textContent === item[answerKey];
+          $$("#choices .choice").forEach((choice) => {
+            choice.disabled = true;
+            if (choice.textContent === item[answerKey]) choice.classList.add("correct");
+          });
+          if (!ok) button.classList.add("wrong");
+          score(ok);
+          setFeedback($("#quizFeedback"), ok ? "Correct." : `Not quite. The answer is ${item[answerKey]}.`, ok ? "good" : "bad");
+        }, { once: true });
+      });
+    }
+
+    function newTyping() {
+      state.typingCurrent = pick(words);
+      const promptKey = $("#typingDirection").value === "en-nl" ? "en" : "nl";
+      $("#typingPrompt").textContent = state.typingCurrent[promptKey];
+      $("#typingLabel").textContent = $("#typingDirection").value === "en-nl" ? "English" : "Dutch";
+      $("#typedAnswer").value = "";
+      $("#typedAnswer").focus();
+      setFeedback($("#typingFeedback"), "Type the translation.", "");
+    }
+
+    function newPhrase() {
+      state.phraseCurrent = pick(phrases);
+      $("#phrasePrompt").textContent = state.phraseCurrent.en;
+      $("#phraseHint").textContent = `${state.phraseCurrent.note}. Say it in Dutch.`;
+      $("#phraseAnswer").value = "";
+      $("#phraseAnswer").focus();
+      setFeedback($("#phraseFeedback"), "Use the model sentences from Unit 1, Lesson 5.", "");
+    }
+
+    function renderBrowse() {
+      const search = normalize($("#searchBox").value);
+      const category = $("#categoryFilter").value;
+      const filtered = words.filter((word) => {
+        const matchesCategory = category === "all" || word.category === category;
+        const matchesSearch = !search || normalize(`${word.en} ${word.nl}`).includes(search);
+        return matchesCategory && matchesSearch;
+      });
+      $("#wordList").innerHTML = filtered.map((word) => `
+        <div class="word-row">
+          <strong>${word.en}</strong>
+          <span>${word.nl}</span>
+        </div>
+      `).join("");
+      $("#phraseList").innerHTML = phrases.map((phrase) => `
+        <article class="phrase-card">
+          <strong>${phrase.en}</strong>
+          <span>${phrase.nl}</span>
+          <small>${phrase.note}</small>
+        </article>
+      `).join("");
+    }
+
+    function setTab(tab) {
+      state.tab = tab;
+      $$(".tab").forEach((button) => button.setAttribute("aria-selected", button.dataset.tab === tab));
+      $("#quizPanel").classList.toggle("hidden", tab !== "quiz");
+      $("#typingPanel").classList.toggle("hidden", tab !== "typing");
+      $("#phrasesPanel").classList.toggle("hidden", tab !== "phrases");
+      $("#browsePanel").classList.toggle("hidden", tab !== "browse");
+      if (tab === "typing") newTyping();
+      if (tab === "phrases") newPhrase();
+      if (tab === "browse") renderBrowse();
+    }
+
+    $$(".tab").forEach((button) => button.addEventListener("click", () => setTab(button.dataset.tab)));
+    $$(".filters .pill").forEach((button) => {
+      button.addEventListener("click", () => {
+        $$(".filters .pill").forEach((item) => item.classList.remove("active"));
+        button.classList.add("active");
+        state.direction = button.dataset.direction;
+        newQuiz();
+      });
+    });
+
+    $("#nextQuestion").addEventListener("click", newQuiz);
+    $("#resetScore").addEventListener("click", () => {
+      state.score = { correct: 0, wrong: 0, streak: 0 };
+      saveScore();
+    });
+    $("#typingDirection").addEventListener("change", newTyping);
+    $("#skipTyping").addEventListener("click", newTyping);
+    $("#typingForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const answerKey = $("#typingDirection").value === "en-nl" ? "nl" : "en";
+      const expected = state.typingCurrent[answerKey];
+      const ok = acceptable($("#typedAnswer").value, expected);
+      score(ok);
+      setFeedback($("#typingFeedback"), ok ? "Correct. Nice work." : `The answer is ${expected}.`, ok ? "good" : "bad");
+      setTimeout(newTyping, ok ? 750 : 1500);
+    });
+    $("#newPhrase").addEventListener("click", newPhrase);
+    $("#phraseForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const ok = acceptable($("#phraseAnswer").value, state.phraseCurrent.nl);
+      score(ok);
+      setFeedback($("#phraseFeedback"), ok ? "Correct." : `Model answer: ${state.phraseCurrent.nl}`, ok ? "good" : "bad");
+      if (ok) setTimeout(newPhrase, 850);
+    });
+    $$(".source-tabs [data-source]").forEach((button) => {
+      button.addEventListener("click", () => {
+        $$(".source-tabs [data-source]").forEach((item) => item.classList.remove("active"));
+        button.classList.add("active");
+        $("#sourceImage").src = `assets/${button.dataset.source}`;
+      });
+    });
+    $$(".source-tabs [data-review]").forEach((button) => {
+      button.addEventListener("click", () => {
+        $$(".source-tabs [data-review]").forEach((item) => item.classList.remove("active"));
+        button.classList.add("active");
+        $("#wordBrowse").classList.toggle("active", button.dataset.review === "words");
+        $("#phraseBrowse").classList.toggle("active", button.dataset.review === "phrases");
+      });
+    });
+
+    const categories = ["all", ...new Set(words.map((word) => word.category))];
+    $("#categoryFilter").innerHTML = categories.map((category) => `<option value="${category}">${category}</option>`).join("");
+    $("#searchBox").addEventListener("input", renderBrowse);
+    $("#categoryFilter").addEventListener("change", renderBrowse);
+
+    saveScore();
+    newQuiz();
+    renderBrowse();
+  </script>
+</body>
+</html>
